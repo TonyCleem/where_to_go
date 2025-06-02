@@ -7,10 +7,6 @@ class Location(models.Model):
         default='',
         blank=True,
         )
-    images = models.ImageField(
-        null=True,
-        blank=True,
-    )
     description_short = models.TextField(
         default='',
         blank=True,
