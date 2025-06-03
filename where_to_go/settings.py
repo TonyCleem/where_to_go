@@ -129,6 +129,6 @@ STATICFILES_DIRS = [
     "static",
 ]
 
-print("#####3")
-print(STATICFILES_DIRS)
-print("#####3")
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

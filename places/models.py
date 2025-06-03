@@ -26,3 +26,21 @@ class Location(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Image(models.Model):
+    order = models.IntegerField(
+        null=True,
+        blank=False,
+    )
+    image = models.ImageField(
+        null=True,
+        blank=True,
+    )
+    location = models.ForeignKey(
+        Location,
+        on_delete=models.CASCADE,
+    )
+
+    def __str__(self):
+        return '%s %s' % (self.order, self.location)
