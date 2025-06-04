@@ -1,8 +1,11 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-
+from places.models import Location, Image
 
 def index(request):
+    places = Location.objects.all() 
+
+
     locations = {
         "type": "FeatureCollection",
         "features": [
@@ -10,29 +13,30 @@ def index(request):
             "type": "Feature",
             "geometry": {
               "type": "Point",
-              "coordinates": [37.62, 55.793676]
+              "coordinates": [places[0].long, places[0].lat]
               },
             "properties": {
-              "title": "«Легенды Москвы",
+              "title": f"{places[0].title}",
               "placeId": "moscow_legends",
-              "detailsUrl": "/static/places/moscow_legends.json"
+              "detailsUrl": "simple_plug"
               },
             },
             {
             "type": "Feature",
             "geometry": {
               "type": "Point",
-              "coordinates": [37.64, 55.753676]
+              "coordinates": [places[1].long, places[1].lat]
               },
             "properties": {
-              "title": "Крыши24.рф",
+              "title": f"{places[1].title}",
               "placeId": "roofs24",
-              "detailsUrl": "/static/places/roofs24.json"
+              "detailsUrl": "simple_plug"
               },
             },
         ]
     }
-    data = {"locations": locations}
 
-    return render(request, 'index.html', context=data)
+    places_geojson = {"locations": locations}
+
+    return render(request, 'index.html', context=places_geojson)
 
