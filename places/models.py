@@ -7,6 +7,12 @@ class Location(models.Model):
         default='',
         blank=True,
         )
+    place_id = models.CharField(
+        max_length=200,
+        default='',
+        blank=False,
+    )
+    
     description_short = models.TextField(
         default='',
         blank=True,
