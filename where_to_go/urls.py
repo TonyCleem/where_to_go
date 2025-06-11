@@ -21,9 +21,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 from places.models import Location, Image
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name="index"),
-    path('places/<int:place>/', views.location),
+    path('places/<int:place_id>/', views.location, name='location'),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
