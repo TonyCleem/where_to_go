@@ -42,6 +42,7 @@ class Image(models.Model):
     image = models.ImageField(
         null=True,
         blank=True,
+        upload_to="media/"
     )
     location = models.ForeignKey(
         Location,
