@@ -30,6 +30,9 @@ class Location(models.Model):
         blank=False,
     )
 
+    class Meta:
+        ordering = ['title']
+
     def __str__(self):
         return self.title
 
@@ -48,6 +51,9 @@ class Image(models.Model):
         Location,
         on_delete=models.CASCADE,
     )
+
+    class Meta:
+        ordering = ['order']
 
     def __str__(self):
         return '%s %s' % (self.order, self.location)

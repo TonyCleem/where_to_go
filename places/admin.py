@@ -1,8 +1,8 @@
 from django.contrib import admin
 from places.models import *
 from django.utils.html import format_html
-
-# Register your models here.
+from adminsortable2.admin import SortableStackedInline
+from adminsortable2.admin import SortableAdminMixin
 
 
 @admin.register(Image)
@@ -10,13 +10,14 @@ class ImageAdmin(admin.ModelAdmin):
     pass
 
 
-class Imageinline(admin.TabularInline):
+class Imageinline(SortableStackedInline):
     model = Image
+    extra = 1
     readonly_fields = [
-        "get_preview",
+        "preview",
         ]
 
-    def get_preview(self, obj):
+    def preview(self, obj):
         return format_html('<img src="{url}" width="{width}" height={height} />'.format(
             url=obj.image.url,
             width=200,
@@ -24,11 +25,11 @@ class Imageinline(admin.TabularInline):
             )
     )
 
-    fields = ('image', 'get_preview', 'order')
+    fields = ('image', 'preview', 'order')
 
 
 @admin.register(Location)
-class LocationAdmin(admin.ModelAdmin):
+class LocationAdmin(SortableAdminMixin, admin.ModelAdmin):
     inlines = [
         Imageinline,
         ]
