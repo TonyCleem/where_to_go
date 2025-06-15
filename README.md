@@ -14,7 +14,7 @@
 
 >[python](https://www.python.org/) и [pip](https://pypi.org/project/pip/) должны быть установлены
 
-`Скачайте код проекта удобным для Вас способом, например`:
+Скачайте код проекта удобным для Вас способом, например:
 ```
 git clone https://github.com/TonyCleem/where_to_go.git
 ```
