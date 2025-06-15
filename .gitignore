@@ -2,8 +2,8 @@
 .gitattributes
 
 # Byte-compiled / optimized / DLL files
-__pycache__/
-*/__pycache__/
+/places/__pycache__/*
+/__pycache__/* 
 *.py[cod]
 *$py.class
 
@@ -142,6 +142,10 @@ ENV/
 env.bak/
 venv.bak/
 
+.gitignore
+.gitattributes
+.gitbook/
+
 # Spyder project settings
 .spyderproject
 .spyproject
@@ -198,3 +202,4 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+.gitignore
