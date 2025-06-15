@@ -9,7 +9,7 @@
 ## Локальный запуск
 
 
-`Подготовьте окружение`:
+### Подготовьте окружение:
 
 
 >[python](https://www.python.org/) и [pip](https://pypi.org/project/pip/) должны быть установлены
@@ -19,7 +19,7 @@
 git clone https://github.com/TonyCleem/where_to_go.git
 ```
 
-`Установите зависимости:`
+### Установите зависимости:
 
 
 >Примечание!  
@@ -29,7 +29,7 @@ git clone https://github.com/TonyCleem/where_to_go.git
 pip install -r requirements.txt
 ```
 
-`Подготовка и запуск:`
+### Подготовка и запуск:
 
 - Измените `.env`.  
 ```
