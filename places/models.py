@@ -6,8 +6,10 @@ class Location(models.Model):
     title = models.CharField(
         max_length=200,
         default='',
-        blank=True,
+        blank=False,
+        verbose_name="Название места",
         )
+
     place_id = models.CharField(
         max_length=200,
         default='',
@@ -33,7 +35,8 @@ class Location(models.Model):
     )
 
     class Meta:
-        ordering = ['title']
+        ordering = ['place_id']
+
 
     def __str__(self):
         return self.title
