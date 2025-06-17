@@ -4,7 +4,7 @@
 ![alt text](static/demo.png)
 
 ## Начать использовать
-Для демонстрации проекта перейдите по ссылке [tonycleem.pythonanywhere.com](tonycleem.pythonanywhere.com)
+Для демонстрации проекта перейдите по [ссылке](tonycleem.pythonanywhere.com)
 
 
 ## Самостоятельный запуск проекта
