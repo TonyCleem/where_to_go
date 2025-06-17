@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import os
 from dotenv import load_dotenv
-from environs import env
 from pathlib import Path
 
 
@@ -102,10 +101,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_URL = "static/"
 
-STATIC_ROOT = "/home/tc/Devman/Projects/where_to_go/static_root"
+STATIC_ROOT = os.path.join(BASE_DIR,'static_root')
 
 STATICFILES_DIRS = [
-    "static",
+    os.path.join(BASE_DIR,'static'),
 ]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/user')
