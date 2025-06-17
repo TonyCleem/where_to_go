@@ -30,6 +30,7 @@ class Imageinline(SortableStackedInline):
 
 @admin.register(Location)
 class LocationAdmin(SortableAdminMixin, admin.ModelAdmin):
+    search_fields =  ['title']
     inlines = [
         Imageinline,
         ]
