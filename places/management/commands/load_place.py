@@ -70,16 +70,18 @@ class Command(BaseCommand):
                         geo_json = json.load(geo_json)
                         self.get_or_create_locations(geo_json)
                 print("Locations successfully created!")
-        except IntegrityError as error:
-            print('ERROR:', error)
+            except IntegrityError as error:
+                print('ERROR:', error)
             
 
-        if options['url']
+        if options['url']:
             try:
+                print('Location is loading...')
                 url = options['url']
                 response = requests.get(url)
                 geo_json = response.json()
                 self.get_or_create_locations(geo_json)
+                print('Success!')
                         
             except IntegrityError as error:
                 print('ERROR:', error)
