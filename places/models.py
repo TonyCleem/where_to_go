@@ -8,21 +8,23 @@ class Location(models.Model):
         default='',
         blank=False,
         verbose_name="Название места",
+        unique=True,
         )
 
     place_id = models.CharField(
         max_length=200,
+        null=True,
+        blank=True,
+        unique=True,
+    )
+
+    description_short = models.TextField(
         default='',
         blank=False,
     )
-    
-    description_short = models.TextField(
-        default='',
-        blank=True,
-    )
     description_long = HTMLField(
         default = '',
-        blank = True
+        blank = False
     )
     
     long = models.FloatField(
@@ -44,13 +46,12 @@ class Location(models.Model):
 
 class Image(models.Model):
     order = models.IntegerField(
-        null=True,
+        default=1,
         blank=False,
     )
     image = models.ImageField(
         null=True,
-        blank=True,
-        upload_to="media/"
+        blank=False,
     )
     location = models.ForeignKey(
         Location,

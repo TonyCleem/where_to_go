@@ -1,10 +1,13 @@
 import json
+import os
+import urllib
 from django.urls import reverse
 from django.http import HttpResponse
 from django.http.response import JsonResponse
 from django.shortcuts import render
 from places.models import Location, Image
 from django.shortcuts import get_object_or_404
+from where_to_go.settings import BASE_DIR
 
 
 def location(request, place_id):
@@ -54,3 +57,13 @@ def index(request):
     places_geojson = {"locations": locations}
 
     return render(request, 'index.html', context=places_geojson)
+
+
+def get_json(request, json_file):
+    filepath = f"{BASE_DIR}/places/geo_json/{json_file}"
+    filepath = urllib.parse.unquote(filepath)
+
+    with open(filepath, 'r') as geojson_file:
+        geo_json = json.load(geojson_file)
+    
+    return JsonResponse(geo_json, safe=False,json_dumps_params={'ensure_ascii': False})
