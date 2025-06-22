@@ -1,6 +1,8 @@
-Django~=5.2
-pillow~=11.2.1
-django-admin-sortable2~=2.2.8
-django-tinymce~=4.1.0
-python-dotenv~=1.1.0
-environs~=14.2.0
+Django==5.2.1
+django-admin-sortable2==2.2.8
+django-tinymce==4.1.0
+environs==14.2.0
+marshmallow==4.0.0
+pillow==11.2.1
+python-dotenv==1.1.0
+requests==2.32.4
