@@ -50,6 +50,15 @@ python manage.py migrate
 ```
 python manage.py createsuperuser
 ```
+- Соберите статику (для web-сервера)
+```python
+python manage.py collectstatic
+```
+- Загрузите локации используя аргументы для `load_place`
+```python
+python manage.py load_place --help
+```
+
 - Запустите сайт
 ```
 python manage.py runserver <ваш хост>:<свободный порт>
