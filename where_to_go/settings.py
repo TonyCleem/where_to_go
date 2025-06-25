@@ -1,16 +1,18 @@
 import os
+import environs
 from dotenv import load_dotenv
 from pathlib import Path
-
+from environs import env
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 load_dotenv()
-SECRET_KEY = os.environ['SECRET_KEY']
+env.read_env()
+SECRET_KEY = env.str('SECRET_KEY')
 
-DEBUG = os.environ['DEBUG_VALUE']
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
+DEBUG = env.bool('DEBUG_VALUE', default=False)
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -58,8 +60,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-        'HOST': os.environ['HOST'],
-        'PORT': os.getenv('PORT'),
+        'HOST': env.str('HOST'),
+        'PORT': env.int('PORT'),
     }
 }
 
