@@ -1,8 +1,10 @@
 import os
-import environs
-from dotenv import load_dotenv
 from pathlib import Path
+
+from dotenv import load_dotenv
+
 from environs import env
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -36,7 +38,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'where_to_go.urls'
+ROOT_URLCONF = 'places.urls'
 
 TEMPLATES = [
     {
@@ -90,10 +92,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_URL = "static/"
 
-STATIC_ROOT = os.path.join(BASE_DIR,'static_root')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR,'static'),
+    os.path.join(BASE_DIR, 'static'),
 ]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

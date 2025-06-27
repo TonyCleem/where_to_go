@@ -5,18 +5,9 @@ from tinymce.models import HTMLField
 class Location(models.Model):
     title = models.CharField(
         max_length=200,
-        default='',
-        blank=False,
         verbose_name="Название места",
         unique=True,
         )
-
-    place_id = models.CharField(
-        max_length=200,
-        null=True,
-        blank=True,
-        unique=True,
-    )
 
     description_short = models.TextField(
         default='',
@@ -37,7 +28,7 @@ class Location(models.Model):
     )
 
     class Meta:
-        ordering = ['place_id']
+        ordering = ['title']
 
 
     def __str__(self):

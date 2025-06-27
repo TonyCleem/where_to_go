@@ -63,7 +63,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         if options['all']:
             try:
-                print('Creating locations. Please wait...')
+                print('CreatДо концing locations. Please wait...')
                 filepath = os.path.join(BASE_DIR, 'places/geo_json')
                 for filename in os.listdir(filepath):
                     with open (os.path.join(filepath, filename), 'r') as geo_json:
