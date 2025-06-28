@@ -55,9 +55,9 @@ ALLOWED_HOSTS = [<hostname list>]
 ### Запуск
 ___
 
-- Примените миграции
+- Создайте и примените миграции
 ```
-python manage.py migrate
+python manage.py makemigrations && python manage.py migrate
 ```
 
 - Создайте профиль для админки
