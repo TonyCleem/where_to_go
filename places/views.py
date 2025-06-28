@@ -20,8 +20,8 @@ def location(request, id):
         "title": f"{location.title}",
         "places_id": f"{location.id}",
         "imgs": image_links,
-        "description_short": f"{location.description_short}",
-        "description_long": f"{location.description_long}",
+        "description_short": f"{location.short_description}",
+        "description_long": f"{location.long_description}",
         "coordinates": {
             "lat": f"{location.long}",
             "lng": f"{location.lat}",

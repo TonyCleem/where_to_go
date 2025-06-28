@@ -1,4 +1,5 @@
 from django.db import models
+
 from tinymce.models import HTMLField
 
 
@@ -8,28 +9,25 @@ class Location(models.Model):
         verbose_name="Название места",
         unique=True,
         )
-
-    description_short = models.TextField(
+    short_description = models.TextField(
         default='',
-        blank=False,
+        blank=True,
+        verbose_name='Краткое описание',
     )
-    description_long = HTMLField(
-        default = '',
-        blank = False
-    )
-    
+    long_description = HTMLField(
+        default='',
+        blank=True,
+        verbose_name='Полное описание'
+        )
     long = models.FloatField(
-        null=True,
-        blank=False,
-    )
+        verbose_name='Долгота',
+        )
     lat = models.FloatField(
-        null=True,
-        blank=False,
+        verbose_name='Широта',
     )
 
     class Meta:
         ordering = ['title']
-
 
     def __str__(self):
         return self.title
@@ -37,20 +35,21 @@ class Location(models.Model):
 
 class Image(models.Model):
     order = models.IntegerField(
-        default=1,
-        blank=False,
+        db_index=True,
+        verbose_name='Порядок',
     )
     image = models.ImageField(
-        null=True,
-        blank=False,
+        verbose_name='Изображение',
     )
     location = models.ForeignKey(
         Location,
         on_delete=models.CASCADE,
+        verbose_name='Локация',
+        related_name='images',
     )
 
     class Meta:
         ordering = ['order']
 
     def __str__(self):
-        return '%s %s' % (self.order, self.location)
+        return f'{self.order} - {self.location}'

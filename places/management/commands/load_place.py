@@ -18,12 +18,12 @@ class Command(BaseCommand):
     def get_or_create_locations(self, geo_json):
         location, created = Location.objects.get_or_create(
             title=geo_json["title"],
-            description_short=geo_json["description_short"],
-            description_long=geo_json["description_long"],
+            short_description=geo_json["description_short"],
+            long_description=geo_json["description_long"],
             long=geo_json["coordinates"]["lng"],
             lat=geo_json["coordinates"]["lat"],
             )
-        images=geo_json["imgs"]
+        images = geo_json["imgs"]
         
         for order, image_link in enumerate(images, start=1):
             response = requests.get(image_link)
@@ -63,7 +63,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         if options['all']:
             try:
-                print('CreatДо концing locations. Please wait...')
+                print('Creating locations. Please wait...')
                 filepath = os.path.join(BASE_DIR, 'places/geo_json')
                 for filename in os.listdir(filepath):
                     with open (os.path.join(filepath, filename), 'r') as geo_json:
