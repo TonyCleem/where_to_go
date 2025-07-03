@@ -14,7 +14,15 @@ env.read_env()
 SECRET_KEY = env.str('SECRET_KEY')
 
 DEBUG = env.bool('DEBUG_VALUE', default=False)
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
+ALLOWED_HOSTS = env.list(
+    'ALLOWED_HOSTS',
+    default=[
+        'example.com',
+        'www.example.com',
+        '127.0.0.1',
+        'localhost'
+    ]
+)
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -33,6 +41,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',

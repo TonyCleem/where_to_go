@@ -1,6 +1,8 @@
 import json
 import urllib
 
+from django.conf import settings
+from django.db.models import Prefetch
 from django.http.response import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
@@ -8,23 +10,31 @@ from django.urls import reverse
 
 from places.models import Image, Location
 
-from where_to_go.settings import BASE_DIR
+
+BASE_DIR = settings.BASE_DIR
 
 
 def location(request, id):
-    location = get_object_or_404(Location, id=id)
-    if location:
-        images = Image.objects.filter(location__title=location.title)
-        image_links = [link.image.url for link in images]
+    location = get_object_or_404(
+        Location.objects.prefetch_related(
+            Prefetch(
+                'images',
+                queryset=Image.objects.all(),
+                to_attr='all_images',
+            )
+        ),
+        pk=id
+    )
+    image_links = [link.image.url for link in location.all_images]
     geo_json = {
-        "title": f"{location.title}",
-        "places_id": f"{location.id}",
+        "title": location.title,
+        "places_id": location.id,
         "imgs": image_links,
-        "description_short": f"{location.short_description}",
-        "description_long": f"{location.long_description}",
+        "description_short": location.short_description,
+        "description_long": location.long_description,
         "coordinates": {
-            "lat": f"{location.long}",
-            "lng": f"{location.lat}",
+            "lat": location.long,
+            "lng": location.lat,
         }
     }
     return JsonResponse(
@@ -41,7 +51,6 @@ def index(request):
     locations = list()
     for place in places:
         url = reverse('location', args=[place.id])
-
         location = {
             "type": "FeatureCollection",
             "features": [
@@ -52,14 +61,13 @@ def index(request):
                   "coordinates": [place.long, place.lat]
                 },
                 "properties": {
-                  "title": f"{place.title}",
-                  "placeId": f"{place.id}",
-                  "detailsUrl": f"{url}"
+                  "title": place.title,
+                  "placeId": place.id,
+                  "detailsUrl": url,
                 }
               },
             ]
         }
-
         locations.append(location)
     places_geojson = {"locations": locations}
 

@@ -1,13 +1,15 @@
-from django.contrib import admin
-from places.models import *
-from django.utils.html import format_html
-from adminsortable2.admin import SortableStackedInline
 from adminsortable2.admin import SortableAdminMixin
+from adminsortable2.admin import SortableStackedInline
+
+from django.contrib import admin
+from django.utils.html import format_html
+
+from places.models import Image, Location
 
 
 @admin.register(Image)
 class ImageAdmin(admin.ModelAdmin):
-    pass
+    autocomplete_fields = ['location']
 
 
 class Imageinline(SortableStackedInline):
@@ -18,19 +20,19 @@ class Imageinline(SortableStackedInline):
         ]
 
     def preview(self, obj):
-        return format_html('<img src="{url}" width="{width}" height={height} />'.format(
+        return format_html(
+            '<img src="{url}" style="max-width:{max_width}px; max-height:{max_height}px;" />',
             url=obj.image.url,
-            width=200,
-            height=200,
-            )
-    )
+            max_width=200,
+            max_height=200,
+        )
 
     fields = ('image', 'preview', 'order')
 
 
 @admin.register(Location)
 class LocationAdmin(SortableAdminMixin, admin.ModelAdmin):
-    search_fields =  ['title']
+    search_fields = ['title']
     inlines = [
         Imageinline,
         ]

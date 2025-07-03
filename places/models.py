@@ -10,12 +10,10 @@ class Location(models.Model):
         unique=True,
         )
     short_description = models.TextField(
-        default='',
         blank=True,
         verbose_name='Краткое описание',
     )
     long_description = HTMLField(
-        default='',
         blank=True,
         verbose_name='Полное описание'
         )
@@ -35,6 +33,8 @@ class Location(models.Model):
 
 class Image(models.Model):
     order = models.IntegerField(
+        default=0,
+        blank=True,
         db_index=True,
         verbose_name='Порядок',
     )
@@ -44,8 +44,8 @@ class Image(models.Model):
     location = models.ForeignKey(
         Location,
         on_delete=models.CASCADE,
-        verbose_name='Локация',
         related_name='images',
+        verbose_name='Локация',
     )
 
     class Meta:
