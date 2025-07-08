@@ -19,10 +19,7 @@ def error_print(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
 
 
-class Command(BaseCommand):
-    help = 'Upload data to the database from the command line'
-
-    def get_or_create_locations(self, geo_json):
+def get_or_create_locations(geo_json):
         location, created = Location.objects.get_or_create(
             title=geo_json["title"],
             defaults={
@@ -33,19 +30,43 @@ class Command(BaseCommand):
             }
         )
         images = geo_json["imgs"]
+        count_connections = 0
         for order, image_link in enumerate(images, start=1):
-            response = requests.get(image_link)
-            response.raise_for_status()
-            image_link = urlparse(image_link)
-            path_from_link = image_link.path
-            image_name = os.path.basename(path_from_link)
-            image_for_location, created = Image.objects.get_or_create(
-                location=location,
-                image=ContentFile(response.content, name=f'{image_name}'),
-                defaults={
-                    'order': order,
-                }
-            )
+            while True:
+                try:
+                    response = requests.get(image_link, timeout=10)
+                    response.raise_for_status()
+                    image_link = urlparse(image_link)
+                    path_from_link = image_link.path
+                    image_name = os.path.basename(path_from_link)
+                    image_for_location, created = Image.objects.get_or_create(
+                        location=location,
+                        image=ContentFile(response.content, name=f'{image_name}'),
+                        defaults={
+                            'order': order,
+                        }
+                    )
+                    if count_connections:
+                        print('')
+                        print('Connection is established')
+                        count_connections = 0
+                    break
+                except IntegrityError as error:
+                    print('ERROR:', error)
+                    break
+                except requests.exceptions.HTTPError as error:
+                    print('HTTPError: Invalid URL')
+                    error_print(error)
+                    break
+                except requests.exceptions.ConnectionError as error:
+                    print('ConnectionError: No internet connection\nAttempt to reconnect')
+                    time.sleep(10)
+                    error_print(error)
+                    count_connections += 1
+
+
+class Command(BaseCommand):
+    help = 'Upload data to the database from the command line'
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -64,28 +85,15 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         if options['all']:
-            while True:
-                try:
-                    print('Creating locations. Please wait...')
-                    filepath = os.path.join(BASE_DIR, 'places/geo_json')
-                    for filename in os.listdir(filepath):
-                        with open(os.path.join(filepath, filename), 'r') as geo_json:
-                            geo_json = json.load(geo_json)
-                            self.get_or_create_locations(geo_json)
-                    print("Locations successfully created!")
-                    break
-                except IntegrityError as error:
-                    print('ERROR:', error)
-                    break
-                except requests.exceptions.HTTPError as error:
-                    print('HTTPError: Invalid URL')
-                    error_print(error)
-                    break
-                except requests.exceptions.ConnectionError as error:
-                    print('ConnectionError: No internet connection\nAttempt to reconnect')
-                    time.sleep(10)
-                    error_print(error)
+            print('Creating locations. Please wait...')
+            filepath = os.path.join(BASE_DIR, 'places/geo_json')
+            for filename in os.listdir(filepath):
+                with open(os.path.join(filepath, filename), 'r') as geo_json:
+                    geo_json = json.load(geo_json)
+                    get_or_create_locations(geo_json)
+            print("Locations successfully created!")
         if options['url']:
+            count_connections = 0
             while True:
                 try:
                     print('Location is loading...')
@@ -93,7 +101,11 @@ class Command(BaseCommand):
                     response = requests.get(url)
                     response.raise_for_status()
                     geo_json = response.json()
-                    self.get_or_create_locations(geo_json)
+                    get_or_create_locations(geo_json)
+                    if count_connections:
+                        print('')
+                        print('Connection is established')
+                        count_connections = 0
                     print('Success!')
                     break
                 except IntegrityError as error:
@@ -107,3 +119,4 @@ class Command(BaseCommand):
                     print('ConnectionError: No internet connection\nAttempt to reconnect')
                     time.sleep(10)
                     error_print(error)
+                    count_connections += 1

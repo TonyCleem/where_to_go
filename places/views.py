@@ -48,27 +48,25 @@ def location(request, id):
 
 def index(request):
     places = Location.objects.all()
-    locations = list()
+    locations = {
+            "type": "FeatureCollection",
+            "features": []
+        }
     for place in places:
         url = reverse('location', args=[place.id])
         location = {
-            "type": "FeatureCollection",
-            "features": [
-              {
-                "type": "Feature",
-                "geometry": {
-                  "type": "Point",
-                  "coordinates": [place.long, place.lat]
-                },
-                "properties": {
-                  "title": place.title,
-                  "placeId": place.id,
-                  "detailsUrl": url,
-                }
-              },
-            ]
+            "type": "Feature",
+            "geometry": {
+              "type": "Point",
+              "coordinates": [place.long, place.lat]
+            },
+            "properties": {
+              "title": place.title,
+              "placeId": place.id,
+              "detailsUrl": url,
+            },
         }
-        locations.append(location)
+        locations['features'].append(location)
     places_geojson = {"locations": locations}
 
     return render(request, 'index.html', context=places_geojson)

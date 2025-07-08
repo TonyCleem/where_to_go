@@ -35,7 +35,7 @@ ___
 ```
 SECRET_KEY = <secret key for base>
 
-DEBUG_VALUE = <boolean value>
+DEBUG = <boolean value>
 
 ALLOWED_HOSTS = [<hostname list>]
 ```
