@@ -30,39 +30,29 @@ def get_or_create_locations(geo_json):
             }
         )
         images = geo_json["imgs"]
-        count_connections = 0
         for order, image_link in enumerate(images, start=1):
-            while True:
-                try:
-                    response = requests.get(image_link, timeout=10)
-                    response.raise_for_status()
-                    image_link = urlparse(image_link)
-                    path_from_link = image_link.path
-                    image_name = os.path.basename(path_from_link)
-                    image_for_location, created = Image.objects.get_or_create(
-                        location=location,
-                        image=ContentFile(response.content, name=f'{image_name}'),
-                        defaults={
-                            'order': order,
-                        }
-                    )
-                    if count_connections:
-                        print('')
-                        print('Connection is established')
-                        count_connections = 0
-                    break
-                except IntegrityError as error:
-                    print('ERROR:', error)
-                    break
-                except requests.exceptions.HTTPError as error:
-                    print('HTTPError: Invalid URL')
-                    error_print(error)
-                    break
-                except requests.exceptions.ConnectionError as error:
-                    print('ConnectionError: No internet connection\nAttempt to reconnect')
-                    time.sleep(10)
-                    error_print(error)
-                    count_connections += 1
+            try:
+                response = requests.get(image_link, timeout=10)
+                response.raise_for_status()
+                image_link = urlparse(image_link)
+                path_from_link = image_link.path
+                image_name = os.path.basename(path_from_link)
+                image_for_location, created = Image.objects.get_or_create(
+                    location=location,
+                    image=ContentFile(response.content, name=f'{image_name}'),
+                    defaults={
+                        'order': order,
+                    }
+                )
+            except IntegrityError as error:
+                print('ERROR:', error)
+            except requests.exceptions.HTTPError as error:
+                print('HTTPError: Invalid URL')
+                error_print(error)
+            except requests.exceptions.ConnectionError as error:
+                print('ConnectionError: No internet connection\nAttempt to reconnect')
+                time.sleep(10)
+                error_print(error)
 
 
 class Command(BaseCommand):
@@ -93,30 +83,20 @@ class Command(BaseCommand):
                     get_or_create_locations(geo_json)
             print("Locations successfully created!")
         if options['url']:
-            count_connections = 0
-            while True:
-                try:
-                    print('Location is loading...')
-                    url = options['url']
-                    response = requests.get(url)
-                    response.raise_for_status()
-                    geo_json = response.json()
-                    get_or_create_locations(geo_json)
-                    if count_connections:
-                        print('')
-                        print('Connection is established')
-                        count_connections = 0
-                    print('Success!')
-                    break
-                except IntegrityError as error:
-                    print('ERROR:', error)
-                    break
-                except requests.exceptions.HTTPError as error:
-                    print('HTTPError: Invalid URL')
-                    error_print(error)
-                    break
-                except requests.exceptions.ConnectionError as error:
-                    print('ConnectionError: No internet connection\nAttempt to reconnect')
-                    time.sleep(10)
-                    error_print(error)
-                    count_connections += 1
+            try:
+                print('Location is loading...')
+                url = options['url']
+                response = requests.get(url)
+                response.raise_for_status()
+                geo_json = response.json()
+                get_or_create_locations(geo_json)
+                print('Success!')
+            except IntegrityError as error:
+                print('ERROR:', error)
+            except requests.exceptions.HTTPError as error:
+                print('HTTPError: Invalid URL')
+                error_print(error)
+            except requests.exceptions.ConnectionError as error:
+                print('ConnectionError: No internet connection\nAttempt to reconnect')
+                time.sleep(10)
+                error_print(error)
